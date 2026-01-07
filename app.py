@@ -15,40 +15,64 @@ st.set_page_config(
 # CSS kustom
 st.markdown("""
 <style>
+    /* CSS Variables */
+    :root {
+        --primary-color: #1E3A8A;
+        --secondary-color: #3B82F6;
+        --text-color-light: #1F2937;
+        --text-color-dark: #F3F4F6;
+        --bg-light: #FFFFFF;
+        --bg-dark: #0E1117;
+        --card-bg-light: #F8FAFC;
+        --card-bg-dark: #1E1E1E;
+        --border-light: #E2E8F0;
+        --border-dark: #374151;
+        --highlight-bg-light: #EFF6FF;
+        --highlight-bg-dark: #1E3A8A;
+    }
+
+    /* Menggunakan class yang konsisten dengan variabel CSS */
     .main-header {
         font-size: 2.5rem;
-        color: #1E3A8A;
+        color: var(--primary-color);
         text-align: center;
         margin-bottom: 1rem;
         font-weight: 700;
     }
+    
     .section-header {
         font-size: 1.8rem;
-        color: #1E3A8A;
+        color: var(--primary-color);
         margin-top: 2rem;
         margin-bottom: 1rem;
-        border-bottom: 2px solid #1E3A8A;
+        border-bottom: 2px solid var(--primary-color);
         padding-bottom: 0.5rem;
     }
+    
     .subsection-header {
         font-size: 1.4rem;
-        color: #2563EB;
+        color: var(--secondary-color);
         margin-top: 1.5rem;
         margin-bottom: 1rem;
     }
+    
+    /* Container yang responsif terhadap tema Streamlit */
     .highlight-box {
-        background-color: #EFF6FF;
+        background-color: rgba(59, 130, 246, 0.1);
         padding: 1.5rem;
         border-radius: 10px;
         border-left: 5px solid #3B82F6;
         margin: 1rem 0;
+        color: inherit;
     }
+    
     .data-card {
-        background-color: #F8FAFC;
-        padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid #E2E8F0;
+        background-color: rgba(100, 116, 139, 0.1);
+        padding: 1.5rem;
+        border-radius: 10px;
+        border: 1px solid rgba(100, 116, 139, 0.2);
         margin: 0.5rem 0;
+        color: inherit;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -167,7 +191,24 @@ def create_segmentasi_chart():
     fig.update_traces(textposition='inside', textinfo='percent+label')
     return fig
 
+# Di bagian create_platform_usage_chart():
+
 def create_platform_usage_chart():
+    # Definisikan custom color scales yang lebih gelap
+    custom_blues = [
+        [0.0, '#1e3b8a'],  # Dark blue
+        [0.3, '#2563eb'],  # Medium blue
+        [0.6, '#3b82f6'],  # Standard blue
+        [1.0, '#60a5fa']   # Light blue (tidak terlalu cerah)
+    ]
+    
+    custom_greens = [
+        [0.0, '#065f46'],  # Dark green
+        [0.3, '#059669'],  # Medium green
+        [0.6, '#10b981'],  # Standard green
+        [1.0, '#34d399']   # Light green (tidak terlalu cerah)
+    ]
+    
     # Chart 1: Pengguna Gen Z per Platform
     fig1 = px.bar(
         platform_data,
@@ -176,10 +217,17 @@ def create_platform_usage_chart():
         orientation='h',
         title='Pengguna Gen Z per Platform (%)',
         color='Pengguna Gen Z (%)',
-        color_continuous_scale='Blues',
-        text=platform_data['Pengguna Gen Z (%)'].apply(lambda x: f'{x}%')
+        color_continuous_scale=custom_blues,
+        text=platform_data['Pengguna Gen Z (%)'].apply(lambda x: f'{x}%'),
+        range_color=[60, 100]  # Batasi range warna dari 60% ke 100%
     )
-    fig1.update_layout(height=400, coloraxis_showscale=False)
+    fig1.update_layout(
+        height=400, 
+        coloraxis_showscale=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#333333')
+    )
     
     # Chart 2: Waktu Penggunaan Harian
     fig2 = px.bar(
@@ -189,14 +237,35 @@ def create_platform_usage_chart():
         orientation='h',
         title='Waktu Penggunaan Harian (menit)',
         color='Waktu Harian (menit)',
-        color_continuous_scale='Greens',
-        text=platform_data['Waktu Harian (menit)'].apply(lambda x: f'{x}m')
+        color_continuous_scale=custom_greens,
+        text=platform_data['Waktu Harian (menit)'].apply(lambda x: f'{x}m'),
+        range_color=[30, 100]  # Batasi range warna dari 30 menit ke 100 menit
     )
-    fig2.update_layout(height=400, coloraxis_showscale=False)
+    fig2.update_layout(
+        height=400, 
+        coloraxis_showscale=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#333333')
+    )
     
     return fig1, fig2
 
 def create_konsumsi_chart():
+    # Definisikan custom color scales yang lebih gelap
+    custom_purples = [
+        [0.0, '#4c1d95'],  # Very dark purple
+        [0.3, '#6d28d9'],  # Dark purple
+        [0.6, '#8b5cf6'],  # Standard purple
+        [1.0, '#a78bfa']   # Light purple (tidak terlalu cerah)
+    ]
+    
+    custom_oranges = [
+        [0.0, '#9a3412'],  # Very dark orange/brown
+        [0.3, '#ea580c'],  # Dark orange
+        [0.6, '#f97316'],  # Standard orange
+        [1.0, '#fdba74']   # Light orange (tidak terlalu cerah)
+    ]
     # Chart 1: Pembelian Online per Kategori
     fig1 = px.bar(
         konsumsi_data,
@@ -204,10 +273,16 @@ def create_konsumsi_chart():
         y='Persentase Pembelian Online',
         title='Pembelian Online per Kategori (%)',
         color='Persentase Pembelian Online',
-        color_continuous_scale='Purples',
+        color_continuous_scale=custom_purples,
         text=konsumsi_data['Persentase Pembelian Online'].apply(lambda x: f'{x}%')
     )
-    fig1.update_layout(height=400, coloraxis_showscale=False)
+    fig1.update_layout(
+        height=400, 
+        coloraxis_showscale=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#333333')
+    )
     
     # Chart 2: Pertumbuhan YoY
     fig2 = px.bar(
@@ -216,10 +291,16 @@ def create_konsumsi_chart():
         y='Pertumbuhan YoY (%)',
         title='Pertumbuhan YoY Konsumsi (%)',
         color='Pertumbuhan YoY (%)',
-        color_continuous_scale='Oranges',
+        color_continuous_scale=custom_oranges,
         text=konsumsi_data['Pertumbuhan YoY (%)'].apply(lambda x: f'{x}%')
     )
-    fig2.update_layout(height=400, coloraxis_showscale=False)
+    fig2.update_layout(
+        height=400, 
+        coloraxis_showscale=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#333333')
+    )
     
     return fig1, fig2
 
@@ -237,6 +318,12 @@ def create_karir_chart():
     return fig
 
 def create_mental_health_chart():
+    custom_reds = [
+        [0.0, '#7f1d1d'],  # Very dark red
+        [0.3, '#dc2626'],  # Dark red
+        [0.6, '#ef4444'],  # Standard red
+        [1.0, '#f87171']   # Light red (tidak terlalu cerah)
+    ]
     fig = px.bar(
         mental_health_data,
         x='Prevalensi (%)',
@@ -244,11 +331,16 @@ def create_mental_health_chart():
         orientation='h',
         title='Prevalensi Masalah Kesehatan Mental (%)',
         color='Prevalensi (%)',
-        color_continuous_scale='Reds',
+        color_continuous_scale=custom_reds,
         text=mental_health_data['Prevalensi (%)'].apply(lambda x: f'{x}%'),
         height=400
     )
-    fig.update_layout(coloraxis_showscale=False)
+    fig.update_layout(
+        coloraxis_showscale=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#333333')
+    )
     return fig
 
 # Tampilkan konten berdasarkan pilihan sidebar
@@ -260,8 +352,11 @@ if section == "📋 Executive Summary":
     with col1:
         st.markdown("""
         <div class="highlight-box">
-        <h4>📌 Ringkasan Temuan Utama</h4>
-        <p>Laporan ini menyajikan analisis komprehensif Gen Z (15-24 tahun) di Kota Medan berdasarkan data sekunder terpercaya dari BPS, lembaga survei, dan platform digital.</p>
+            <h4 style="color: inherit;">📌 Ringkasan Temuan Utama</h4>
+            <p style="color: inherit; line-height: 1.6;">
+                Laporan ini menyajikan analisis komprehensif Gen Z (15-24 tahun) di Kota Medan 
+                berdasarkan data sekunder terpercaya dari BPS, lembaga survei, dan platform digital.
+            </p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -279,12 +374,14 @@ if section == "📋 Executive Summary":
         # Quick stats
         st.markdown("""
         <div class="data-card">
-        <h4>📊 Quick Stats</h4>
-        <p>📍 <strong>Lokasi</strong>: Kota Medan</p>
-        <p>👥 <strong>Populasi Gen Z</strong>: ~455,500 jiwa</p>
-        <p>📱 <strong>Penetrasi Internet</strong>: ~80%</p>
-        <p>🛒 <strong>Pembeli Online</strong>: >65%</p>
-        <p>🎯 <strong>Rentan Mental Health</strong>: >60%</p>
+            <h4 style="color: inherit;">📊 Quick Stats</h4>
+            <div style="color: inherit;">
+                <p style="margin-bottom: 0.5rem;">📍 <strong>Lokasi</strong>: Kota Medan</p>
+                <p style="margin-bottom: 0.5rem;">👥 <strong>Populasi Gen Z</strong>: ~455,500 jiwa</p>
+                <p style="margin-bottom: 0.5rem;">📱 <strong>Penetrasi Internet</strong>: ~80%</p>
+                <p style="margin-bottom: 0.5rem;">🛒 <strong>Pembeli Online</strong>: >65%</p>
+                <p style="margin-bottom: 0;">🎯 <strong>Rentan Mental Health</strong>: >60%</p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -642,134 +739,183 @@ elif section == "📈 Analisis Data & Temuan":
             """)
 
 elif section == "👥 Segmentasi Gen Z Medan":
-    st.markdown('<h2 class="section-header">Segmentasi Gen Z Medan</h2>', unsafe_allow_html=True)
+    st.markdown('# 👥 Segmentasi Gen Z Medan')
     
     fig = create_segmentasi_chart()
     st.plotly_chart(fig, width='stretch')
     
-    # Detail setiap segmentasi
-    segments = [
-        {
-            "nama": "Digital-First Urbanites",
-            "persentase": "35-45%",
-            "karakteristik": [
-                "Aktif di TikTok/Instagram daily",
-                "Pembeli online reguler (>4x/bulan)",
-                "Tertarik lifestyle & fashion trends",
-                "Early adopter teknologi baru",
-                "Urban mindset & cosmopolitan",
-                "Highly influenced by influencers"
-            ],
-            "platform": ["TikTok", "Instagram", "Shopee", "Spotify", "Twitter"],
-            "warna": "#3B82F6",
-            "usia": "18-24 tahun",
-            "pendidikan": "SMA hingga S1",
-            "lokasi": "Pusat kota & suburban"
-        },
-        {
-            "nama": "Edu-Career Seekers",
-            "persentase": "25-30%",
-            "karakteristik": [
-                "Fokus studi & karir jangka panjang",
-                "Pilih jurusan pragmatis & prospektif",
-                "Aktif organisasi kampus & komunitas",
-                "Mencari sertifikasi & skill tambahan",
-                "Orientasi prestasi & achievement",
-                "Risk-averse dalam keputusan"
-            ],
-            "platform": ["LinkedIn", "YouTube Edu", "Quora", "Google Scholar", "Kompas"],
-            "warna": "#10B981",
-            "usia": "17-22 tahun",
-            "pendidikan": "SMA akhir hingga S1",
-            "lokasi": "Sekitar kampus & akses pendidikan"
-        },
-        {
-            "nama": "Entrepreneurial Hustlers",
-            "persentase": "15-25%",
-            "karakteristik": [
-                "Jalankan side-hustle aktif",
-                "Manfaatkan live commerce & marketplace",
-                "Network bisnis luas & aktif",
-                "Risk-taker moderat & inovatif",
-                "Revenue & profit oriented",
-                "Multitasking & agile"
-            ],
-            "platform": ["TikTok Shop", "Instagram Business", "WhatsApp Business", "Marketplace", "Bukalapak"],
-            "warna": "#F59E0B",
-            "usia": "19-24 tahun",
-            "pendidikan": "Beragam, fokus skill praktis",
-            "lokasi": "Area komersial & home-based"
-        },
-        {
-            "nama": "Tradition-Oriented Youth",
-            "persentase": "10-15%",
-            "karakteristik": [
-                "Prioritas keluarga & nilai agama",
-                "Internet untuk kebutuhan fungsional",
-                "Konservatif dalam nilai & tradisi",
-                "Komunitas lokal & religious strong",
-                "Offline activities preference",
-                "Selective dalam adopsi teknologi"
-            ],
-            "platform": ["WhatsApp", "Facebook", "YouTube", "TikTok (konsumsi)", "Google"],
-            "warna": "#8B5CF6",
-            "usia": "15-22 tahun",
-            "pendidikan": "SMA hingga S1",
-            "lokasi": "Permukiman tradisional & pinggiran"
-        }
-    ]
+    # Tampilkan statistik ringkasan
+    col1, col2, col3, col4 = st.columns(4)
     
-    # Tampilkan detail segmentasi dalam grid
-    cols = st.columns(2)
+    with col1:
+        st.metric("Digital-First Urbanites", "40%", "35-45% range")
+    with col2:
+        st.metric("Edu-Career Seekers", "27.5%", "25-30% range")
+    with col3:
+        st.metric("Entrepreneurial Hustlers", "20%", "15-25% range")
+    with col4:
+        st.metric("Tradition-Oriented", "12.5%", "10-15% range")
     
-    for idx, segment in enumerate(segments):
-        with cols[idx % 2]:
-            st.markdown(f"""
-            <div style="border-left: 5px solid {segment['warna']}; padding-left: 15px; margin-bottom: 20px; background-color: #F8FAFC; border-radius: 8px; padding: 15px;">
-                <h4 style="color: {segment['warna']};">{segment['nama']} ({segment['persentase']})</h4>
-                
-                <p><strong>👥 Profil:</strong> {segment['usia']} • {segment['pendidikan']} • {segment['lokasi']}</p>
-                
-                <p><strong>🎯 Karakteristik:</strong></p>
-                <ul style="margin-bottom: 10px;">
-            """, unsafe_allow_html=True)
-            
-            for char in segment['karakteristik']:
-                st.markdown(f"<li style='font-size: 0.9rem;'>{char}</li>", unsafe_allow_html=True)
-            
-            st.markdown(f"""
-                </ul>
-                
-                <p><strong>📱 Platform Dominan:</strong><br>{', '.join(segment['platform'])}</p>
-            </div>
-            """, unsafe_allow_html=True)
+    st.markdown("---")
     
-    # Rekomendasi per segmentasi
-    st.markdown('<h3 class="subsection-header">Rekomendasi Pendekatan per Segmentasi</h3>', unsafe_allow_html=True)
+    # Bagian 1: Digital-First Urbanites
+    st.markdown('### 🔵 Digital-First Urbanites (35-45%)')
+    st.markdown('**👥 Profil:** 18-24 tahun • SMA hingga S1 • Pusat kota & suburban')
     
-    rekomendasi_data = pd.DataFrame({
-        'Segment': [s['nama'] for s in segments],
-        'Marketing Approach': [
-            'Influencer collaboration, UGC campaigns, AR filters, viral challenges',
-            'Edu-content series, career webinars, mentorship programs, scholarship info',
-            'Business tool demos, entrepreneur success stories, networking events, funding info',
-            'Community-based campaigns, value-driven content, trusted religious figures endorsement'
-        ],
-        'Program Prioritas': [
-            'Digital literacy, creative content creation workshops, trend forecasting',
-            'Career preparation bootcamps, skill certification programs, internship matching',
-            'Entrepreneurship incubator, micro-funding access, digital marketing training',
-            'Family engagement programs, traditional-modern balance workshops, community leadership'
-        ],
-        'Channel Preference': [
-            'TikTok, Instagram Reels, Spotify podcasts',
-            'YouTube, LinkedIn, email newsletters, campus events',
-            'WhatsApp Business, live commerce, business forums',
-            'Facebook groups, community gatherings, religious institutions'
-        ]
-    })
+    col1, col2 = st.columns(2)
     
-    st.dataframe(rekomendasi_data, width='stretch', hide_index=True)
+    with col1:
+        st.markdown('**🎯 Karakteristik Utama:**')
+        st.markdown("""
+        - Aktif di TikTok/Instagram daily
+        - Pembeli online reguler (>4x/bulan)
+        - Tertarik lifestyle & fashion trends
+        - Early adopter teknologi baru
+        - Urban mindset & cosmopolitan
+        - Highly influenced by influencers
+        """)
+    
+    with col2:
+        st.markdown('**📱 Platform Dominan:**')
+        st.markdown("""
+        • TikTok  
+        • Instagram  
+        • Shopee  
+        • Spotify  
+        • Twitter
+        """)
+        
+        st.markdown('**🎯 Pendekatan Rekomendasi:**')
+        st.markdown("""
+        • Kolaborasi influencer
+        • Kampanye UGC
+        • Filter AR interaktif
+        • Challenge viral
+        """)
+    
+    st.markdown("---")
+    
+    # Bagian 2: Edu-Career Seekers
+    st.markdown('### 🟢 Edu-Career Seekers (25-30%)')
+    st.markdown('**👥 Profil:** 17-22 tahun • SMA akhir hingga S1 • Sekitar kampus & akses pendidikan')
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown('**🎯 Karakteristik Utama:**')
+        st.markdown("""
+        - Fokus studi & karir jangka panjang
+        - Pilih jurusan pragmatis & prospektif
+        - Aktif organisasi kampus & komunitas
+        - Mencari sertifikasi & skill tambahan
+        - Orientasi prestasi & achievement
+        - Risk-averse dalam keputusan
+        """)
+    
+    with col2:
+        st.markdown('**📱 Platform Dominan:**')
+        st.markdown("""
+        • LinkedIn  
+        • YouTube Edu  
+        • Quora  
+        • Google Scholar  
+        • Kompas
+        """)
+        
+        st.markdown('**🎯 Pendekatan Rekomendasi:**')
+        st.markdown("""
+        • Seri konten edukasi
+        • Webinar karir
+        • Program mentorship
+        • Info beasiswa
+        """)
+    
+    st.markdown("---")
+    
+    # Bagian 3: Entrepreneurial Hustlers
+    st.markdown('### 🟠 Entrepreneurial Hustlers (15-25%)')
+    st.markdown('**👥 Profil:** 19-24 tahun • Beragam, fokus skill praktis • Area komersial & home-based')
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown('**🎯 Karakteristik Utama:**')
+        st.markdown("""
+        - Jalankan side-hustle aktif
+        - Manfaatkan live commerce & marketplace
+        - Network bisnis luas & aktif
+        - Risk-taker moderat & inovatif
+        - Revenue & profit oriented
+        - Multitasking & agile
+        """)
+    
+    with col2:
+        st.markdown('**📱 Platform Dominan:**')
+        st.markdown("""
+        • TikTok Shop  
+        • Instagram Business  
+        • WhatsApp Business  
+        • Marketplace  
+        • Bukalapak
+        """)
+        
+        st.markdown('**🎯 Pendekatan Rekomendasi:**')
+        st.markdown("""
+        • Demo alat bisnis
+        • Kisah sukses wirausaha
+        • Event networking
+        • Info pendanaan
+        """)
+    
+    st.markdown("---")
+    
+    # Bagian 4: Tradition-Oriented Youth
+    st.markdown('### 🟣 Tradition-Oriented Youth (10-15%)')
+    st.markdown('**👥 Profil:** 15-22 tahun • SMA hingga S1 • Permukiman tradisional & pinggiran')
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown('**🎯 Karakteristik Utama:**')
+        st.markdown("""
+        - Prioritas keluarga & nilai agama
+        - Internet untuk kebutuhan fungsional
+        - Konservatif dalam nilai & tradisi
+        - Komunitas lokal & religious strong
+        - Offline activities preference
+        - Selective dalam adopsi teknologi
+        """)
+    
+    with col2:
+        st.markdown('**📱 Platform Dominan:**')
+        st.markdown("""
+        • WhatsApp  
+        • Facebook  
+        • YouTube  
+        • TikTok (konsumsi)  
+        • Google
+        """)
+        
+        st.markdown('**🎯 Pendekatan Rekomendasi:**')
+        st.markdown("""
+        • Kampanye berbasis komunitas
+        • Konten bernilai tinggi
+        • Rekomendasi figur agama
+        • Program keluarga
+        """)
+    
+    # Tabel Ringkasan Rekomendasi
+    st.markdown("### 📊 Ringkasan Rekomendasi Segmentasi")
+    
+    data_segment = {
+        "Segment": ["Digital-First Urbanites", "Edu-Career Seekers", "Entrepreneurial Hustlers", "Tradition-Oriented Youth"],
+        "Target (%)": ["35-45%", "25-30%", "15-25%", "10-15%"],
+        "Strategi Utama": ["Influencer & Konten Viral", "Edukasi & Karir", "Wirausaha & Bisnis", "Komunitas & Nilai"],
+        "Channel Prioritas": ["TikTok, Instagram", "YouTube, LinkedIn", "Marketplace, WA Business", "Facebook, Grup Komunitas"]
+    }
+    
+    df_segment = pd.DataFrame(data_segment)
+    st.table(df_segment.style.hide(axis="index"))
 
 elif section == "💡 Implikasi & Rekomendasi":
     st.markdown('<h2 class="section-header">Implikasi & Rekomendasi Strategis</h2>', unsafe_allow_html=True)
@@ -786,13 +932,11 @@ elif section == "💡 Implikasi & Rekomendasi":
         ### 🎯 Rekomendasi untuk Pemkot Medan & Dinas Terkait
         
         **1. 🎓 Program Literasi Digital & Keuangan Terintegrasi**
-        ```python
-        # Kolaborasi Dinas Pendidikan, OJK, Bank Indonesia
-        target = "SMA & Mahasiswa di 50+ institusi"
-        metode = "Workshop hybrid, mobile app gamification, peer mentoring"
-        indikator = "Pengetahuan 80%, sikap positif 75%, perilaku sehat 70%"
-        timeline = "Q3 2024 - Q4 2025"
-        ```
+        - **Kolaborasi Dinas Pendidikan, OJK, Bank Indonesia**
+        - **target** = "SMA & Mahasiswa di 50+ institusi"
+        - **metode** = "Workshop hybrid, mobile app gamification, peer mentoring"
+        - **indikator** = "Pengetahuan 80%, sikap positif 75%, perilaku sehat 70%"
+        - **timeline** = "Q3 2024 - Q4 2025"
         
         **2. 💚 Layanan Kesehatan Mental Komprehensif**
         - **Screening rutin** di 100+ sekolah/kampus
@@ -920,13 +1064,11 @@ elif section == "💡 Implikasi & Rekomendasi":
         ### 📈 Rekomendasi untuk Bisnis & Industri di Medan
         
         **1. 🎯 Gen Z-Centric Marketing Strategy**
-        ```
-        Platform Mix: TikTok + Instagram + WhatsApp Business
-        Content Type: Authentic, short-form, interactive, value-driven
-        Format: Live commerce, UGC campaigns, AR experiences, micro-influencers
-        Payment: Digital wallet options + financial education
-        Language: Bahasa Medan informal, relatable, inclusive
-        ```
+        - **Platform Mix**: TikTok + Instagram + WhatsApp Business
+        - **Content Type**: Authentic, short-form, interactive, value-driven
+        - **Format**: Live commerce, UGC campaigns, AR experiences, micro-influencers
+        - **Payment**: Digital wallet options + financial education
+        - **Language**: Bahasa Medan informal, relatable, inclusive
         
         **2. 🛍️ Product & Service Development**
         - **Youth-centric design thinking** dalam pengembangan produk
@@ -1170,12 +1312,12 @@ elif section == "📚 Kesimpulan & Referensi":
     
     # Rekomendasi Penelitian Lanjutan
     st.markdown('<h3 class="subsection-header">🔬 Rekomendasi Penelitian Lanjutan</h3>', unsafe_allow_html=True)
-    
+
     research_priority = pd.DataFrame({
-        'Priority': ['Tinggi', 'Sedang', 'Rendah'],
+        'Priority': ['Tinggi', 'Tinggi', 'Tinggi', 'Sedang', 'Sedang', 'Sedang', 'Sedang', 'Rendah', 'Rendah', 'Rendah'],
         'Research Topics': [
             'Survei primer representatif di Medan (n=2000, stratified sampling SMA & mahasiswa)',
-            'Studi longitudinal dampak media sosial terhadap kesehatan mental (3 tahun)',
+            'Studi longitudinal dampak media sosial terhadap kesehatan mental',
             'Evaluasi program literasi digital/keuangan (pre-post intervention dengan control group)',
             'Analisis komparatif Medan vs kota besar Indonesia lainnya (benchmarking study)',
             'Deep-dive qualitative motivasi & barriers entrepreneurship Gen Z Medan',
@@ -1185,63 +1327,130 @@ elif section == "📚 Kesimpulan & Referensi":
             'Policy analysis youth-focused policies & programs effectiveness',
             'Future skills forecasting untuk kebutuhan pasar kerja Medan 2030'
         ],
-        'Timeline': [
-            '6-8 bulan',
-            '3 tahun',
-            '1 tahun',
-            '9 bulan',
-            '6 bulan',
-            '1.5 tahun',
-            '4 bulan',
-            '8 bulan',
-            '7 bulan',
-            '1 tahun'
-        ],
-        'Estimated Budget': [
-            'Rp 750 juta',
-            'Rp 1.2 miliar',
-            'Rp 500 juta',
-            'Rp 600 juta',
-            'Rp 300 juta',
-            'Rp 800 juta',
-            'Rp 250 juta',
-            'Rp 700 juta',
-            'Rp 400 juta',
-            'Rp 900 juta'
+        'Alasan': [
+            'Mengisi gap data spesifik Medan yang masih terbatas dalam laporan ini',
+            'Mengukur dampak jangka panjang media sosial terhadap kesehatan mental Gen Z Medan',
+            'Mengukur efektivitas intervensi literasi digital/keuangan yang sudah berjalan',
+            'Memahami posisi Medan dalam konteks nasional dan belajar best practices',
+            'Memahami motivasi mendalam dan hambatan wirausaha Gen Z Medan',
+            'Mengukur dampak nyata program kesehatan mental di lingkungan pendidikan',
+            'Memahami perilaku online Gen Z Medan secara natural dan kontekstual',
+            'Mengukur kontribusi ekonomi dari ekosistem wirausaha pemuda Medan',
+            'Mengevaluasi efektivitas kebijakan dan program yang sudah diimplementasikan',
+            'Mempersiapkan Gen Z Medan untuk kebutuhan keterampilan masa depan'
         ]
     })
-    
+
+    # Tampilkan tabel lengkap
     st.dataframe(research_priority, width='stretch', hide_index=True)
-    
+
+    # Atau jika ingin mengelompokkan berdasarkan prioritas:
+    st.markdown("---")
+
+    # Alternatif: Tampilkan berdasarkan prioritas dengan expander
+    st.markdown("### 🎯 Rekomendasi Penelitian Berdasarkan Prioritas")
+
+    with st.expander("🔥 **PRIORITAS TINGGI** (3 penelitian)", expanded=True):
+        high_priority = research_priority[research_priority['Priority'] == 'Tinggi']
+        for idx, row in high_priority.iterrows():
+            st.markdown(f"**{row['Research Topics']}**")
+            st.markdown(f"*Alasan:* {row['Alasan']}")
+            st.markdown("---")
+
+    with st.expander("⚖️ **PRIORITAS SEDANG** (4 penelitian)"):
+        medium_priority = research_priority[research_priority['Priority'] == 'Sedang']
+        for idx, row in medium_priority.iterrows():
+            st.markdown(f"**{row['Research Topics']}**")
+            st.markdown(f"*Alasan:* {row['Alasan']}")
+            st.markdown("---")
+
+    with st.expander("📘 **PRIORITAS RENDAH** (3 penelitian)"):
+        low_priority = research_priority[research_priority['Priority'] == 'Rendah']
+        for idx, row in low_priority.iterrows():
+            st.markdown(f"**{row['Research Topics']}**")
+            st.markdown(f"*Alasan:* {row['Alasan']}")
+            st.markdown("---")
+
+    # Atau menggunakan tabs
+    st.markdown("---")
+    st.markdown("### 📋 Detail Rekomendasi Penelitian")
+
+    tab1, tab2, tab3 = st.tabs(["🔥 Prioritas Tinggi", "⚖️ Prioritas Sedang", "📘 Prioritas Rendah"])
+
+    with tab1:
+        high_df = research_priority[research_priority['Priority'] == 'Tinggi']
+        st.dataframe(high_df[['Research Topics', 'Alasan']], 
+                    width='stretch', hide_index=True)
+        
+    with tab2:
+        medium_df = research_priority[research_priority['Priority'] == 'Sedang']
+        st.dataframe(medium_df[['Research Topics', 'Alasan']], 
+                    width='stretch', hide_index=True)
+        
+    with tab3:
+        low_df = research_priority[research_priority['Priority'] == 'Rendah']
+        st.dataframe(low_df[['Research Topics', 'Alasan']], 
+                    width='stretch', hide_index=True)
+
+    # Tambahan: Ringkasan alasan prioritas
+    st.markdown("---")
+    st.markdown("### 🎯 Kriteria Prioritas Penelitian")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown("#### 🔥 **Prioritas Tinggi**")
+        st.markdown("""
+        - **Dampak langsung** pada kebijakan dan program
+        - **Mengisi gap kritis** dalam data dan pengetahuan
+        - **Urgensi tinggi** untuk aksi segera
+        - **Relevansi tinggi** dengan isu prioritas Gen Z Medan
+        """)
+
+    with col2:
+        st.markdown("#### ⚖️ **Prioritas Sedang**")
+        st.markdown("""
+        - **Nilai strategis** untuk perencanaan jangka menengah
+        - **Mendukung pengambilan keputusan** yang lebih baik
+        - **Memperdalam pemahaman** tentang fenomena spesifik
+        - **Membangun basis pengetahuan** untuk intervensi
+        """)
+
+    with col3:
+        st.markdown("#### 📘 **Prioritas Rendah**")
+        st.markdown("""
+        - **Nilai akademik** dan pengembangan ilmu pengetahuan
+        - **Dampak jangka panjang** untuk perencanaan strategis
+        - **Melengkapi penelitian** yang sudah ada
+        - **Mempersiapkan** untuk tantangan masa depan
+        """)
+
     # Closing statement
     st.markdown("""
     ---
-    
     ### 📝 Penutup
-    
+
     **MEDAN YOUTH INSIGHTS** merupakan upaya sistematis untuk memahami kompleksitas dan dinamika Generasi Z di Kota Medan berdasarkan data dan evidence yang tersedia. 
-    
+
     **Harapan ke Depan:**
     - Laporan ini menjadi titik awal untuk dialog dan kolaborasi yang lebih intensif
     - Data dan insights dijadikan dasar pengambilan keputusan yang lebih baik
     - Program dan kebijakan yang lebih tepat sasaran dan berdampak
     - Medan menjadi contoh kota yang sukses memberdayakan generasi mudanya
-    
+
     **Kontribusi & Kolaborasi:**
     Untuk pengembangan penelitian dan program lebih lanjut, silakan hubungi tim peneliti melalui platform kolaborasi yang akan dibentuk.
-    
-    ***"Investasi terbaik untuk masa depan Medan adalah investasi pada generasi mudanya hari ini."***
+
+    ***"Investasi terbaik untuk masa depan adalah investasi pada generasi mudanya hari ini."***
     """)
 
 # Footer
 st.markdown("---")
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("**📊 Data Sources:** BPS, APJII, We Are Social, Populix, Alvara, e-Conomy SEA")
 with col2:
-    st.markdown("**📅 Last Updated:** Juni 2024")
-with col3:
     st.markdown("**⚠️ Disclaimer:** Estimasi berdasarkan data sekunder terverifikasi")
 
 st.markdown("<p style='text-align: center; color: #64748B; font-size: 0.9rem;'>© FXF28 MEDAN YOUTH INSIGHTS - Analisis Komprehensif Gen Z Medan</p>", unsafe_allow_html=True)
