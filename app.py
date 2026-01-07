@@ -11,111 +11,177 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# CSS custom dengan kontras yang lebih baik
+# CSS custom yang mendukung dark mode dan light mode
 st.markdown("""
 <style>
+    :root {
+        --primary-color: #0D47A1;
+        --primary-dark: #002171;
+        --primary-light: #5472D3;
+        --secondary-color: #1976D2;
+        --text-light: #212121;
+        --text-dark: #E0E0E0;
+        --bg-light: #FFFFFF;
+        --bg-dark: #0E1117;
+        --card-light: #E3F2FD;
+        --card-dark: #1E293B;
+        --border-light: #BBDEFB;
+        --border-dark: #334155;
+        --surface-light: #F5F5F5;
+        --surface-dark: #1E293B;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --danger: #EF5350;
+    }
+    
+    [data-theme="light"] {
+        --text-color: var(--text-light);
+        --bg-color: var(--bg-light);
+        --card-bg: var(--card-light);
+        --border-color: var(--border-light);
+        --surface-color: var(--surface-light);
+    }
+    
+    [data-theme="dark"] {
+        --text-color: var(--text-dark);
+        --bg-color: var(--bg-dark);
+        --card-bg: var(--card-dark);
+        --border-color: var(--border-dark);
+        --surface-color: var(--surface-dark);
+    }
+    
     .main-header {
         font-size: 2.5rem;
-        color: #0D47A1;
+        color: var(--primary-color);
         font-weight: 800;
         margin-bottom: 0.5rem;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
+    
     .sub-header {
         font-size: 1.3rem;
-        color: #1A237E;
+        color: var(--primary-color);
         margin-bottom: 2rem;
         font-weight: 600;
+        opacity: 0.9;
     }
+    
     .section-header {
         font-size: 1.8rem;
-        color: #0D47A1;
-        border-bottom: 3px solid #1565C0;
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--secondary-color);
         padding-bottom: 0.5rem;
         margin-top: 2rem;
         margin-bottom: 1.5rem;
         font-weight: 700;
     }
+    
     .highlight-box {
-        background-color: #E3F2FD;
+        background-color: var(--card-bg);
         border-radius: 10px;
         padding: 1.5rem;
         margin: 1rem 0;
-        border-left: 5px solid #1976D2;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-left: 5px solid var(--secondary-color);
+        color: var(--text-color);
     }
+    
     .source-badge {
-        background-color: #BBDEFB;
-        color: #0D47A1;
+        background-color: var(--card-bg);
+        color: var(--primary-color);
         padding: 0.3rem 0.8rem;
         border-radius: 15px;
         font-size: 0.8rem;
         display: inline-block;
         margin: 0.2rem;
         font-weight: 600;
-        border: 1px solid #90CAF9;
+        border: 1px solid var(--border-color);
     }
+    
     .metric-card {
-        background: linear-gradient(135deg, #1A237E 0%, #0D47A1 100%);
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
         color: white;
         border-radius: 10px;
         padding: 1.5rem;
         text-align: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .data-table {
-        background-color: #F5F5F5;
-        border-radius: 8px;
-        padding: 1rem;
-        overflow-x: auto;
-    }
+    
     .custom-table {
         width: 100%;
         border-collapse: collapse;
         margin: 1rem 0;
+        color: var(--text-color);
     }
+    
     .custom-table th {
-        background-color: #1976D2;
+        background-color: var(--secondary-color);
         color: white;
         padding: 12px;
         text-align: left;
         font-weight: bold;
     }
+    
     .custom-table td {
         padding: 10px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid var(--border-color);
     }
+    
     .custom-table tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: var(--surface-color);
     }
-    .custom-table tr:hover {
-        background-color: #e3f2fd;
-    }
+    
     .stTabs [data-baseweb="tab-list"] {
         gap: 2px;
     }
+    
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         white-space: pre-wrap;
-        background-color: #E3F2FD;
+        background-color: var(--card-bg);
         border-radius: 4px 4px 0px 0px;
         gap: 1px;
         padding-top: 10px;
         padding-bottom: 10px;
         font-weight: 600;
+        color: var(--text-color);
     }
+    
     .stTabs [aria-selected="true"] {
-        background-color: #1976D2;
-        color: white;
+        background-color: var(--secondary-color);
+        color: white !important;
     }
+    
     .content-text {
-        color: #212121;
+        color: var(--text-color);
         line-height: 1.6;
         font-size: 1rem;
     }
+    
     .bulleted-list {
-        color: #212121;
+        color: var(--text-color);
         line-height: 1.8;
+    }
+    
+    .card-title {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .card-subtitle {
+        color: var(--text-color);
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+    
+    /* Fix untuk Plotly charts agar responsive di dark mode */
+    .js-plotly-plot .plotly .modebar {
+        background: transparent !important;
+    }
+    
+    /* Styling untuk konten di dalam tabs */
+    .tab-content {
+        padding: 1rem 0;
+        color: var(--text-color);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -124,12 +190,12 @@ st.markdown("""
 with st.sidebar:
     st.markdown("""
     <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="font-size: 2rem; color: #0D47A1; font-weight: bold;">📊</div>
-        <h2 style="color: #0D47A1;">MEDAN YOUTH INSIGHTS</h2>
+        <div style="font-size: 2rem; color: var(--primary-color); font-weight: bold;">📊</div>
+        <h2 style="color: var(--primary-color);">MEDAN YOUTH INSIGHTS</h2>
     </div>
     """, unsafe_allow_html=True)
     
-    st.title("📋 Navigasi")
+    st.markdown("### 📋 Navigasi")
     
     sections = [
         "📌 Executive Summary",
@@ -192,43 +258,51 @@ if selected_section == "Executive Summary":
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("### 👥 Populasi Gen Z")
-        st.markdown("## ~440K")
-        st.markdown("**15-24 tahun**")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="metric-card">
+            <h3 style="margin: 0; font-size: 1.2rem; opacity: 0.9;">👥 Populasi Gen Z</h3>
+            <h1 style="margin: 0.5rem 0; font-size: 2.5rem;">~440K</h1>
+            <p style="margin: 0; opacity: 0.9;">15-24 tahun</p>
+        </div>
+        """, unsafe_allow_html=True)
         
     with col2:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("### 🌐 Penetrasi Internet")
-        st.markdown("## 79.5%")
-        st.markdown("**APJII 2024**")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="metric-card">
+            <h3 style="margin: 0; font-size: 1.2rem; opacity: 0.9;">🌐 Penetrasi Internet</h3>
+            <h1 style="margin: 0.5rem 0; font-size: 2.5rem;">79.5%</h1>
+            <p style="margin: 0; opacity: 0.9;">APJII 2024</p>
+        </div>
+        """, unsafe_allow_html=True)
         
     with col3:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("### 📱 Media Sosial")
-        st.markdown("## >2 jam/hari")
-        st.markdown("**We Are Social 2024**")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="metric-card">
+            <h3 style="margin: 0; font-size: 1.2rem; opacity: 0.9;">📱 Media Sosial</h3>
+            <h1 style="margin: 0.5rem 0; font-size: 2.5rem;">>2 jam/hari</h1>
+            <p style="margin: 0; opacity: 0.9;">We Are Social 2024</p>
+        </div>
+        """, unsafe_allow_html=True)
     
-    st.markdown('<div class="highlight-box">', unsafe_allow_html=True)
     st.markdown("""
-    <div class="content-text">
-    **Laporan ini** merangkum gambaran komprehensif tentang Gen Z (kelompok usia ~15–24 tahun) di Kota Medan—menggabungkan data sekunder resmi (BPS Kota/Provinsi, BPS Nasional, Kemendikbudristek), survei lembaga terakreditasi (Populix, Alvara), laporan platform digital (We Are Social / DataReportal, TikTok, Spotify), laporan e-commerce dan ekonomi digital (e-Conomy SEA, Shopee), serta temuan lembaga keuangan dan institusi internasional (Bank Indonesia, OJK, UNICEF, ILO).
-    
-    ### 🎯 Temuan Utama:
-    
-    1. **Proporsi pemuda besar** - Medan memiliki kelompok 15–24 tahun ~0,43–0,47 juta per kelompok umur
-    2. **Digital natives** - Penetrasi internet dan penggunaan platform sosial sangat tinggi sehingga platform berbasis video (TikTok, Instagram) menjadi kanal utama pengaruh perilaku konsumsi dan identitas
-    3. **Ekonomi digital** - Transisi ke ekonomi digital mendorong kenaikan belanja daring dan penggunaan dompet digital namun literasi keuangan remaja masih perlu ditingkatkan
-    4. **Isu dominan** - Kesehatan mental, aspirasi kerja wirausaha (side-hustle), dan tekanan terhadap pencitraan sosial adalah isu yang dominan
-    
-    ### 📋 Rekomendasi Kunci:
-    Ditujukan kepada pemerintah daerah, institusi pendidikan, pelaku bisnis, dan LSM untuk intervensi pendidikan digital & keuangan, dukungan kesehatan mental berbasis sekolah/kampus, serta program kewirausahaan yang kontekstual untuk Medan.
+    <div class="highlight-box">
+        <div class="content-text">
+            <p><strong>Laporan ini</strong> merangkum gambaran komprehensif tentang Gen Z (kelompok usia ~15–24 tahun) di Kota Medan—menggabungkan data sekunder resmi (BPS Kota/Provinsi, BPS Nasional, Kemendikbudristek), survei lembaga terakreditasi (Populix, Alvara), laporan platform digital (We Are Social / DataReportal, TikTok, Spotify), laporan e-commerce dan ekonomi digital (e-Conomy SEA, Shopee), serta temuan lembaga keuangan dan institusi internasional (Bank Indonesia, OJK, UNICEF, ILO).</p>
+            
+            <h4 style="color: var(--primary-color); margin-top: 1.5rem;">🎯 Temuan Utama:</h4>
+            
+            <ol class="bulleted-list">
+                <li><strong>Proporsi pemuda besar</strong> - Medan memiliki kelompok 15–24 tahun ~0,43–0,47 juta per kelompok umur</li>
+                <li><strong>Digital natives</strong> - Penetrasi internet dan penggunaan platform sosial sangat tinggi sehingga platform berbasis video (TikTok, Instagram) menjadi kanal utama pengaruh perilaku konsumsi dan identitas</li>
+                <li><strong>Ekonomi digital</strong> - Transisi ke ekonomi digital mendorong kenaikan belanja daring dan penggunaan dompet digital namun literasi keuangan remaja masih perlu ditingkatkan</li>
+                <li><strong>Isu dominan</strong> - Kesehatan mental, aspirasi kerja wirausaha (side-hustle), dan tekanan terhadap pencitraan sosial adalah isu yang dominan</li>
+            </ol>
+            
+            <h4 style="color: var(--primary-color); margin-top: 1.5rem;">📋 Rekomendasi Kunci:</h4>
+            <p>Ditujukan kepada pemerintah daerah, institusi pendidikan, pelaku bisnis, dan LSM untuk intervensi pendidikan digital & keuangan, dukungan kesehatan mental berbasis sekolah/kampus, serta program kewirausahaan yang kontekstual untuk Medan.</p>
+        </div>
     </div>
     """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown("**📌 Sumber:** Badan Pusat Statistik Kota Medan")
 
@@ -239,36 +313,50 @@ elif selected_section == "Pendahuluan":
     
     with tab1:
         st.markdown("""
-        <div class="content-text">
-        ### 🏙️ Latar Belakang
-        
-        **Generasi Z** (lahir kira-kira 1997–2012) di Indonesia tumbuh bersamaan dengan penetrasi internet masif dan ledakan platform sosial serta ekonomi digital. **Kota Medan**—sebagai kota terbesar di Sumatera Utara—memiliki konsentrasi pemuda yang signifikan sehingga dinamika sosial, ekonomi, dan budaya Gen Z di Medan menjadi penting bagi perencanaan daerah, pendidikan, dan upaya pemberdayaan ekonomi lokal.
+        <div class="tab-content">
+            <h3 style="color: var(--primary-color);">🏙️ Latar Belakang</h3>
+            
+            <div class="content-text">
+                <p><strong>Generasi Z</strong> (lahir kira-kira 1997–2012) di Indonesia tumbuh bersamaan dengan penetrasi internet masif dan ledakan platform sosial serta ekonomi digital. <strong>Kota Medan</strong>—sebagai kota terbesar di Sumatera Utara—memiliki konsentrasi pemuda yang signifikan sehingga dinamika sosial, ekonomi, dan budaya Gen Z di Medan menjadi penting bagi perencanaan daerah, pendidikan, dan upaya pemberdayaan ekonomi lokal.</p>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">Badan Pusat Statistik Kota Medan</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">Badan Pusat Statistik Kota Medan</span>', unsafe_allow_html=True)
     
     with tab2:
         st.markdown("""
-        <div class="content-text">
-        ### 🎯 Tujuan & Ruang Lingkup
-        
-        **Tujuan:** menyajikan analisis deskriptif-analitis tentang profil demografi, akses digital, pola konsumsi, aspirasi pendidikan & karier, serta nilai/sikap sosial Gen Z SMA & mahasiswa di Medan menggunakan sumber sekunder valid dan terverifikasi.
-        
-        **Ruang lingkup:** fokus pada data terpublikasi (BPS Kota/Provinsi, lembaga survei, platform digital, institusi keuangan, jurnal akademik) sampai tahun publikasi terakhir yang tersedia.
+        <div class="tab-content">
+            <h3 style="color: var(--primary-color);">🎯 Tujuan & Ruang Lingkup</h3>
+            
+            <div class="content-text">
+                <p><strong>Tujuan:</strong> menyajikan analisis deskriptif-analitis tentang profil demografi, akses digital, pola konsumsi, aspirasi pendidikan & karier, serta nilai/sikap sosial Gen Z SMA & mahasiswa di Medan menggunakan sumber sekunder valid dan terverifikasi.</p>
+                
+                <p><strong>Ruang lingkup:</strong> fokus pada data terpublikasi (BPS Kota/Provinsi, lembaga survei, platform digital, institusi keuangan, jurnal akademik) sampai tahun publikasi terakhir yang tersedia.</p>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">Badan Pusat Statistik Indonesia</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">Badan Pusat Statistik Indonesia</span>', unsafe_allow_html=True)
     
     with tab3:
         st.markdown("""
-        <div class="content-text">
-        ### ❓ Pertanyaan Penelitian
-        
-        1. **Bagaimana profil demografi** Gen Z di Medan?
-        2. **Seberapa luas akses dan pola penggunaan** teknologi digital di kalangan mereka?
-        3. **Bagaimana pola konsumsi** dan gaya hidup (on-line / off-line)?
-        4. **Apa aspirasi pendidikan/karier** dan perhatian sosial utama?
-        5. **Implikasi kebijakan & rekomendasi** untuk pemangku kepentingan lokal?
+        <div class="tab-content">
+            <h3 style="color: var(--primary-color);">❓ Pertanyaan Penelitian</h3>
+            
+            <div class="content-text">
+                <ol class="bulleted-list">
+                    <li><strong>Bagaimana profil demografi</strong> Gen Z di Medan?</li>
+                    <li><strong>Seberapa luas akses dan pola penggunaan</strong> teknologi digital di kalangan mereka?</li>
+                    <li><strong>Bagaimana pola konsumsi</strong> dan gaya hidup (on-line / off-line)?</li>
+                    <li><strong>Apa aspirasi pendidikan/karier</strong> dan perhatian sosial utama?</li>
+                    <li><strong>Implikasi kebijakan & rekomendasi</strong> untuk pemangku kepentingan lokal?</li>
+                </ol>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -279,36 +367,48 @@ elif selected_section == "Metodologi":
     
     with col1:
         st.markdown("""
-        <div class="content-text">
-        ### 📝 Jenis Penelitian
-        **Deskriptif-analitis** berbasis data sekunder.
-        
-        ### 📂 Sumber Data:
-        - **Publikasi resmi:** BPS Kota Medan, BPS Sumatera Utara, BPS Nasional, Kemendikbudristek
-        - **Laporan lembaga survei:** Populix, Alvara
-        - **Laporan platform:** We Are Social / DataReportal, TikTok, Spotify
-        - **Laporan e-commerce:** e-Conomy SEA, Shopee
-        - **Lembaga keuangan:** Bank Indonesia & OJK
-        - **Laporan institusional:** Kemenpora, UNICEF, ILO
-        - **Artikel/jurnal akademik** lokal dan nasional
+        <div class="highlight-box">
+            <h4 style="color: var(--primary-color);">📝 Jenis Penelitian</h4>
+            <p class="content-text"><strong>Deskriptif-analitis</strong> berbasis data sekunder.</p>
+            
+            <h4 style="color: var(--primary-color); margin-top: 1.5rem;">📂 Sumber Data:</h4>
+            <ul class="bulleted-list">
+                <li><strong>Publikasi resmi:</strong> BPS Kota Medan, BPS Sumatera Utara, BPS Nasional, Kemendikbudristek</li>
+                <li><strong>Laporan lembaga survei:</strong> Populix, Alvara</li>
+                <li><strong>Laporan platform:</strong> We Are Social / DataReportal, TikTok, Spotify</li>
+                <li><strong>Laporan e-commerce:</strong> e-Conomy SEA, Shopee</li>
+                <li><strong>Lembaga keuangan:</strong> Bank Indonesia & OJK</li>
+                <li><strong>Laporan institusional:</strong> Kemenpora, UNICEF, ILO</li>
+                <li><strong>Artikel/jurnal akademik</strong> lokal dan nasional</li>
+            </ul>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">Badan Pusat Statistik Kota Medan</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">Badan Pusat Statistik Kota Medan</span>', unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
-        <div class="content-text">
-        ### 🔍 Teknik Analisis:
-        - **Triangulasi sumber**
-        - **Sintesis kuantitatif** untuk indikator utama (populasi usia, penetrasi internet, penggunaan platform)
-        - **Analisis kualitatif** tema dari laporan survei serta studi akademik
-        
-        ### ⚠️ Keterbatasan:
-        - **Data spesifik terbatas** - survei perilaku di Kota Medan tidak selalu tersedia sehingga beberapa inferensi menggunakan data Provinsi Sumatera Utara atau data nasional sebagai proxy
-        - **Variasi metodologi** survei antar lembaga (sample, definisi Gen Z) membatasi perbandingan langsung
+        <div class="highlight-box">
+            <h4 style="color: var(--primary-color);">🔍 Teknik Analisis:</h4>
+            <ul class="bulleted-list">
+                <li><strong>Triangulasi sumber</strong></li>
+                <li><strong>Sintesis kuantitatif</strong> untuk indikator utama (populasi usia, penetrasi internet, penggunaan platform)</li>
+                <li><strong>Analisis kualitatif</strong> tema dari laporan survei serta studi akademik</li>
+            </ul>
+            
+            <h4 style="color: var(--primary-color); margin-top: 1.5rem;">⚠️ Keterbatasan:</h4>
+            <ul class="bulleted-list">
+                <li><strong>Data spesifik terbatas</strong> - survei perilaku di Kota Medan tidak selalu tersedia sehingga beberapa inferensi menggunakan data Provinsi Sumatera Utara atau data nasional sebagai proxy</li>
+                <li><strong>Variasi metodologi</strong> survei antar lembaga (sample, definisi Gen Z) membatasi perbandingan langsung</li>
+            </ul>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">sumut.bps.go.id</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">sumut.bps.go.id</span>', unsafe_allow_html=True)
 
 elif selected_section == "Tinjauan Pustaka":
     st.markdown('<h2 class="section-header">📖 3. Tinjauan Pustaka (Ringkas)</h2>', unsafe_allow_html=True)
@@ -318,33 +418,33 @@ elif selected_section == "Tinjauan Pustaka":
     with col1:
         st.markdown("""
         <div class="highlight-box">
-        <h4>🌍 Teori Gen Z Global</h4>
-        <div class="content-text">
-        <p>Literatur global menekankan karakter Gen Z sebagai "digital natives", seeking authenticity, entrepreneurial orientation, dan rentan terhadap isu kesehatan mental yang terkait tekanan media sosial.</p>
-        </div>
-        <span class="source-badge">IAFOR Research Archive</span>
+            <h4>🌍 Teori Gen Z Global</h4>
+            <div class="content-text">
+                <p>Literatur global menekankan karakter Gen Z sebagai "digital natives", seeking authenticity, entrepreneurial orientation, dan rentan terhadap isu kesehatan mental yang terkait tekanan media sosial.</p>
+            </div>
+            <span class="source-badge">IAFOR Research Archive</span>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
         <div class="highlight-box">
-        <h4>🇮🇩 Studi di Indonesia</h4>
-        <div class="content-text">
-        <p>Riset lembaga seperti Alvara, Populix, dan sejumlah jurnal lokal mencatat perilaku konsumsi impulsif, dominasi platform video pendek dalam membentuk tren.</p>
-        </div>
-        <span class="source-badge">Populix</span>
+            <h4>🇮🇩 Studi di Indonesia</h4>
+            <div class="content-text">
+                <p>Riset lembaga seperti Alvara, Populix, dan sejumlah jurnal lokal mencatat perilaku konsumsi impulsif, dominasi platform video pendek dalam membentuk tren.</p>
+            </div>
+            <span class="source-badge">Populix</span>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
         <div class="highlight-box">
-        <h4>🏙️ Konteks Medan</h4>
-        <div class="content-text">
-        <p>Medan sebagai pusat urban Sumatera Utara memiliki demografi muda (banyak 15–24 tahun) dan infrastruktur digital yang terus berkembang.</p>
-        </div>
-        <span class="source-badge">Databoks</span>
+            <h4>🏙️ Konteks Medan</h4>
+            <div class="content-text">
+                <p>Medan sebagai pusat urban Sumatera Utara memiliki demografi muda (banyak 15–24 tahun) dan infrastruktur digital yang terus berkembang.</p>
+            </div>
+            <span class="source-badge">Databoks</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -412,14 +512,15 @@ elif selected_section == "Analisis Data & Temuan":
                 xaxis_title='Kelompok Umur',
                 yaxis_title='Jumlah Penduduk',
                 showlegend=False,
-                plot_bgcolor='white',
-                font=dict(color='#212121')
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='var(--text-color)', size=12)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         st.markdown("""
         <div class="content-text">
-        **📝 Catatan:** angka menunjukkan bahwa Gen Z (15–24) membentuk fraksi signifikan populasi Medan—menegaskan perlunya fokus kebijakan pemuda. Untuk indikator pendidikan (APM/APK) provinsi/daerah, data rasmi terdistribusi di portal Kemendikbudristek.
+            <p><strong>Catatan:</strong> angka menunjukkan bahwa Gen Z (15–24) membentuk fraksi signifikan populasi Medan—menegaskan perlunya fokus kebijakan pemuda. Untuk indikator pendidikan (APM/APK) provinsi/daerah, data rasmi terdistribusi di portal Kemendikbudristek.</p>
         </div>
         """, unsafe_allow_html=True)
         st.markdown('<span class="source-badge">apkapm.data.kemdikbud.go.id</span>', unsafe_allow_html=True)
@@ -432,25 +533,24 @@ elif selected_section == "Analisis Data & Temuan":
         with col1:
             st.markdown("""
             <div class="content-text">
-            ### 📶 Penetrasi Internet Indonesia
-            
-            APJII melaporkan penetrasi pengguna internet mencapai **~79.5%** pada survei 2024 (angka terus naik: sumber media melaporkan 80,66% pada update 2024–2025). Hal ini mencerminkan lingkungan yang kondusif bagi konsumsi konten digital di kalangan remaja perkotaan termasuk Medan.
+                <h4 style="color: var(--primary-color);">📶 Penetrasi Internet Indonesia</h4>
+                <p>APJII melaporkan penetrasi pengguna internet mencapai <strong>~79.5%</strong> pada survei 2024 (angka terus naik: sumber media melaporkan 80,66% pada update 2024–2025). Hal ini mencerminkan lingkungan yang kondusif bagi konsumsi konten digital di kalangan remaja perkotaan termasuk Medan.</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">APJII</span>', unsafe_allow_html=True)
             
             # Gauge chart untuk penetrasi internet
             fig = go.Figure(go.Indicator(
-                mode = "gauge+number",
-                value = 79.5,
-                title = {'text': "Penetrasi Internet Indonesia 2024", 'font': {'color': '#212121'}},
-                domain = {'x': [0, 1], 'y': [0, 1]},
-                gauge = {
-                    'axis': {'range': [None, 100], 'tickcolor': '#212121'},
+                mode="gauge+number",
+                value=79.5,
+                title={'text': "Penetrasi Internet Indonesia 2024", 'font': {'color': 'var(--text-color)'}},
+                domain={'x': [0, 1], 'y': [0, 1]},
+                gauge={
+                    'axis': {'range': [None, 100], 'tickcolor': 'var(--text-color)'},
                     'bar': {'color': "#0D47A1"},
                     'steps': [
-                        {'range': [0, 50], 'color': "lightgray"},
-                        {'range': [50, 80], 'color': "gray"},
+                        {'range': [0, 50], 'color': "#E0E0E0"},
+                        {'range': [50, 80], 'color': "#BDBDBD"},
                         {'range': [80, 100], 'color': "#BBDEFB"}
                     ],
                     'threshold': {
@@ -460,24 +560,26 @@ elif selected_section == "Analisis Data & Temuan":
                     }
                 }
             ))
-            fig.update_layout(height=300, font={'color': '#212121'})
-            st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(
+                height=300,
+                paper_bgcolor='rgba(0,0,0,0)',
+                font={'color': 'var(--text-color)'}
+            )
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         with col2:
             st.markdown("""
             <div class="content-text">
-            ### 📱 Penggunaan Media Sosial
-            
-            Laporan Digital/We Are Social (DataReportal) 2024 menunjukkan Indonesia sebagai salah satu negara dengan waktu rata-rata penggunaan sosial media tinggi (lebih dari **2 jam/hari**) dan penetrasi platform seperti TikTok & Instagram sangat besar.
+                <h4 style="color: var(--primary-color);">📱 Penggunaan Media Sosial</h4>
+                <p>Laporan Digital/We Are Social (DataReportal) 2024 menunjukkan Indonesia sebagai salah satu negara dengan waktu rata-rata penggunaan sosial media tinggi (lebih dari <strong>2 jam/hari</strong>) dan penetrasi platform seperti TikTok & Instagram sangat besar.</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">We Are Social Australia</span>', unsafe_allow_html=True)
             
             st.markdown("""
             <div class="content-text">
-            ### 🎬 Peran TikTok & Format Video Pendek
-            
-            Survei Populix dan laporan TikTok for Business menegaskan dominasi format video pendek dalam membentuk discovery, aspirasi gaya, dan mendorong pembelian impulsif di kalangan Gen Z.
+                <h4 style="color: var(--primary-color);">🎬 Peran TikTok & Format Video Pendek</h4>
+                <p>Survei Populix dan laporan TikTok for Business menegaskan dominasi format video pendek dalam membentuk discovery, aspirasi gaya, dan mendorong pembelian impulsif di kalangan Gen Z.</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">Populix</span>', unsafe_allow_html=True)
@@ -503,18 +605,19 @@ elif selected_section == "Analisis Data & Temuan":
                 xaxis_title='Platform',
                 yaxis_title='Pengguna Gen Z (%)',
                 height=300,
-                font=dict(color='#212121')
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='var(--text-color)', size=12)
             )
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, use_container_width=True, config={'displayModeBar': False})
     
     with tab3:
         st.markdown("#### 💰 4.3 Pola Konsumsi & Gaya Hidup")
         
         st.markdown("""
         <div class="content-text">
-        ### 🛒 E-commerce & Social Commerce
-        
-        e-Conomy SEA (Google-Temasek-Bain) menegaskan akselerasi ekonomi digital di Indonesia; Shopee/Tokopedia/TikTok Shop mendominasi transaksi ritel daring—anak muda cenderung membeli fashion, makanan & minuman, kecantikan, serta gadget melalui platform ini.
+            <h4 style="color: var(--primary-color);">🛒 E-commerce & Social Commerce</h4>
+            <p>e-Conomy SEA (Google-Temasek-Bain) menegaskan akselerasi ekonomi digital di Indonesia; Shopee/Tokopedia/TikTok Shop mendominasi transaksi ritel daring—anak muda cenderung membeli fashion, makanan & minuman, kecantikan, serta gadget melalui platform ini.</p>
         </div>
         """, unsafe_allow_html=True)
         st.markdown('<span class="source-badge">Temasek Corporate Website English</span>', unsafe_allow_html=True)
@@ -536,31 +639,31 @@ elif selected_section == "Analisis Data & Temuan":
             )])
             fig.update_layout(
                 title='Kategori Belanja Online Gen Z',
-                font=dict(color='#212121')
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='var(--text-color)', size=12)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         with col2:
             st.markdown("""
             <div class="content-text">
-            ### 💳 Pola Pengeluaran
-            
-            Studi lokal dan jurnal menemukan Gen Z lebih rentan melakukan pembelian impulsif (dipicu konten visual dan influencer), tetapi juga menunjukkan preferensi untuk pengalaman (kuliner, kafe, travel singkat).
+                <h4 style="color: var(--primary-color);">💳 Pola Pengeluaran</h4>
+                <p>Studi lokal dan jurnal menemukan Gen Z lebih rentan melakukan pembelian impulsif (dipicu konten visual dan influencer), tetapi juga menunjukkan preferensi untuk pengalaman (kuliner, kafe, travel singkat).</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">win.joninstitute.org</span>', unsafe_allow_html=True)
             
             st.markdown("""
             <div class="highlight-box">
-            <h4>📊 Karakteristik Konsumsi Gen Z Medan:</h4>
-            <div class="bulleted-list">
-            <ul>
-            <li><strong>Impulsif:</strong> 65% melakukan pembelian spontan setelah melihat konten</li>
-            <li><strong>Experiential:</strong> Lebih menghargai pengalaman daripada kepemilikan barang</li>
-            <li><strong>Digital Payment:</strong> 78% menggunakan dompet digital untuk transaksi</li>
-            <li><strong>Social Influence:</strong> 72% dipengaruhi oleh rekomendasi influencer/media sosial</li>
-            </ul>
-            </div>
+                <h4>📊 Karakteristik Konsumsi Gen Z Medan:</h4>
+                <div class="bulleted-list">
+                    <ul>
+                        <li><strong>Impulsif:</strong> 65% melakukan pembelian spontan setelah melihat konten</li>
+                        <li><strong>Experiential:</strong> Lebih menghargai pengalaman daripada kepemilikan barang</li>
+                        <li><strong>Digital Payment:</strong> 78% menggunakan dompet digital untuk transaksi</li>
+                        <li><strong>Social Influence:</strong> 72% dipengaruhi oleh rekomendasi influencer/media sosial</li>
+                    </ul>
+                </div>
             </div>
             """, unsafe_allow_html=True)
     
@@ -572,9 +675,8 @@ elif selected_section == "Analisis Data & Temuan":
         with col1:
             st.markdown("""
             <div class="content-text">
-            ### 🏫 Partisipasi Pendidikan
-            
-            Data APM/APK disimpan di portal Kemendikbudristek—umunnya menunjukkan partisipasi SMA di banyak provinsi relatif tinggi; namun pencapaian pendidikan tinggi masih heterogen antar wilayah.
+                <h4 style="color: var(--primary-color);">🏫 Partisipasi Pendidikan</h4>
+                <p>Data APM/APK disimpan di portal Kemendikbudristek—umumnya menunjukkan partisipasi SMA di banyak provinsi relatif tinggi; namun pencapaian pendidikan tinggi masih heterogen antar wilayah.</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">apkapm.data.kemdikbud.go.id</span>', unsafe_allow_html=True)
@@ -599,16 +701,17 @@ elif selected_section == "Analisis Data & Temuan":
                 title='Tren Partisipasi Pendidikan',
                 xaxis_title='Tingkat Pendidikan',
                 yaxis_title='Partisipasi (%)',
-                font=dict(color='#212121')
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='var(--text-color)', size=12)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         with col2:
             st.markdown("""
             <div class="content-text">
-            ### 💼 Aspirasi Karier & Entrepreneurship
-            
-            Survei nasional (Populix, Alvara) dan laporan Kemenpora mengindikasikan minat kuat pada pekerjaan bergaji dan kewirausahaan (side-hustle), dengan harapan fleksibilitas dan peluang digital sebagai jalan masuk.
+                <h4 style="color: var(--primary-color);">💼 Aspirasi Karier & Entrepreneurship</h4>
+                <p>Survei nasional (Populix, Alvara) dan laporan Kemenpora mengindikasikan minat kuat pada pekerjaan bergaji dan kewirausahaan (side-hustle), dengan harapan fleksibilitas dan peluang digital sebagai jalan masuk.</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">Populix</span>', unsafe_allow_html=True)
@@ -633,18 +736,19 @@ elif selected_section == "Analisis Data & Temuan":
                 xaxis_title='Persentase (%)',
                 yaxis_title='Aspirasi',
                 height=400,
-                font=dict(color='#212121')
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='var(--text-color)', size=12)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     with tab5:
         st.markdown("#### ❤️ 4.5 Nilai, Sikap & Keprihatinan Sosial")
         
         st.markdown("""
         <div class="content-text">
-        ### 🧠 Kesehatan Mental
-        
-        Penelitian nasional dan studi UGM menunjukkan peningkatan prevalensi masalah kesehatan mental di kalangan remaja; Gen Z lebih terbuka membahas isu ini tetapi tingkat akses layanan masih terbatas.
+            <h4 style="color: var(--primary-color);">🧠 Kesehatan Mental</h4>
+            <p>Penelitian nasional dan studi UGM menunjukkan peningkatan prevalensi masalah kesehatan mental di kalangan remaja; Gen Z lebih terbuka membahas isu ini tetapi tingkat akses layanan masih terbatas.</p>
         </div>
         """, unsafe_allow_html=True)
         st.markdown('<span class="source-badge">Universitas Gadjah Mada</span>', unsafe_allow_html=True)
@@ -672,31 +776,32 @@ elif selected_section == "Analisis Data & Temuan":
                 xaxis_title='Prevalensi (%)',
                 yaxis_title='Isu',
                 height=400,
-                font=dict(color='#212121')
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='var(--text-color)', size=12)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         with col2:
             st.markdown("""
             <div class="content-text">
-            ### 🏛️ Nilai & Tradisi
-            
-            Gen Z cenderung menggabungkan nilai tradisional (agama, keluarga) dengan orientasi modern (karier, ekspresi diri), menghasilkan dinamika kontradiktif dalam sikap terhadap norma sosial.
+                <h4 style="color: var(--primary-color);">🏛️ Nilai & Tradisi</h4>
+                <p>Gen Z cenderung menggabungkan nilai tradisional (agama, keluarga) dengan orientasi modern (karier, ekspresi diri), menghasilkan dinamika kontradiktif dalam sikap terhadap norma sosial.</p>
             </div>
             """, unsafe_allow_html=True)
             st.markdown('<span class="source-badge">Jurnal UINSU</span>', unsafe_allow_html=True)
             
             st.markdown("""
             <div class="highlight-box">
-            <h4>⚖️ Dinamika Nilai Gen Z Medan:</h4>
-            <div class="bulleted-list">
-            <p><strong>🏛️ Tradisional vs 🚀 Modern:</strong></p>
-            <ul>
-            <li><strong>Nilai Tradisional:</strong> Keluarga (85%), Agama (80%), Gotong Royong (65%)</li>
-            <li><strong>Nilai Modern:</strong> Ekspresi Diri (75%), Karier (90%), Fleksibilitas (70%)</li>
-            </ul>
-            <p><strong>⚡ Konflik Nilai:</strong> 60% melaporkan konflik antara nilai keluarga/tradisi dengan aspirasi pribadi/modern</p>
-            </div>
+                <h4>⚖️ Dinamika Nilai Gen Z Medan:</h4>
+                <div class="bulleted-list">
+                    <p><strong>🏛️ Tradisional vs 🚀 Modern:</strong></p>
+                    <ul>
+                        <li><strong>Nilai Tradisional:</strong> Keluarga (85%), Agama (80%), Gotong Royong (65%)</li>
+                        <li><strong>Nilai Modern:</strong> Ekspresi Diri (75%), Karier (90%), Fleksibilitas (70%)</li>
+                    </ul>
+                    <p><strong>⚡ Konflik Nilai:</strong> 60% melaporkan konflik antara nilai keluarga/tradisi dengan aspirasi pribadi/modern</p>
+                </div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -705,9 +810,8 @@ elif selected_section == "Analisis Komparatif":
     
     st.markdown("""
     <div class="content-text">
-    ### 🏙️ Perbandingan dengan Kota Besar Lain (Jakarta, Surabaya, Bandung)
-    
-    Secara agregat, pola penggunaan platform dan kecenderungan konsumsi Gen Z Medan mirip (tinggi pada video pendek, e-commerce), namun daya beli dan akses infrastruktur bisa sedikit lebih rendah dibanding kota-kota besar di Pulau Jawa—menyebabkan perbedaan dalam ukuran pasar dan prioritas layanan.
+        <h4 style="color: var(--primary-color);">🏙️ Perbandingan dengan Kota Besar Lain (Jakarta, Surabaya, Bandung)</h4>
+        <p>Secara agregat, pola penggunaan platform dan kecenderungan konsumsi Gen Z Medan mirip (tinggi pada video pendek, e-commerce), namun daya beli dan akses infrastruktur bisa sedikit lebih rendah dibanding kota-kota besar di Pulau Jawa—menyebabkan perbedaan dalam ukuran pasar dan prioritas layanan.</p>
     </div>
     """, unsafe_allow_html=True)
     st.markdown('<span class="source-badge">e-Conomy SEA; DataReportal; BPS provinsi</span>', unsafe_allow_html=True)
@@ -763,9 +867,8 @@ elif selected_section == "Analisis Komparatif":
     
     st.markdown("""
     <div class="content-text">
-    ### 🌉 Positioning Medan
-    
-    Medan sebagai hub regional di Sumatera menempatkan Gen Z kota ini sebagai jembatan budaya—lebih beragam etnis & bahasa dibanding kota lain—yang mempengaruhi preferensi konten, kuliner, dan komunitas online lokal.
+        <h4 style="color: var(--primary-color);">🌉 Positioning Medan</h4>
+        <p>Medan sebagai hub regional di Sumatera menempatkan Gen Z kota ini sebagai jembatan budaya—lebih beragam etnis & bahasa dibanding kota lain—yang mempengaruhi preferensi konten, kuliner, dan komunitas online lokal.</p>
     </div>
     """, unsafe_allow_html=True)
     st.markdown('<span class="source-badge">sumut.bps.go.id</span>', unsafe_allow_html=True)
@@ -799,17 +902,18 @@ elif selected_section == "Analisis Komparatif":
         xaxis_title='Kota',
         yaxis_title='Nilai',
         hovermode='x unified',
-        font=dict(color='#212121'),
-        plot_bgcolor='white'
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='var(--text-color)', size=12)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
 elif selected_section == "Segmentasi Gen Z Medan":
     st.markdown('<h2 class="section-header">👥 6. Segmentasi Gen Z Medan</h2>', unsafe_allow_html=True)
     
     st.markdown("""
     <div class="content-text">
-    Berdasarkan sintesis data, Gen Z Medan dapat disegmentasikan (perkiraan/deskriptif):
+        <p>Berdasarkan sintesis data, Gen Z Medan dapat disegmentasikan (perkiraan/deskriptif):</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -853,10 +957,10 @@ elif selected_section == "Segmentasi Gen Z Medan":
     for idx, segment in enumerate(segments):
         with cols[idx % 2]:
             st.markdown(f"""
-            <div style="border-left: 5px solid {segment['warna']}; padding-left: 15px; margin-bottom: 20px; background-color: #E3F2FD; border-radius: 8px; padding: 1rem;">
+            <div style="border-left: 5px solid {segment['warna']}; padding-left: 15px; margin-bottom: 20px; background-color: var(--card-bg); border-radius: 8px; padding: 1rem;">
                 <h4>{segment['icon']} {segment['nama']} <span style="color: {segment['warna']};">({segment['persentase']})</span></h4>
                 <div class="content-text">
-                <p>{segment['karakteristik']}</p>
+                    <p>{segment['karakteristik']}</p>
                 </div>
                 <p><small><strong>Sumber:</strong> {segment['sumber']}</small></p>
             </div>
@@ -874,14 +978,15 @@ elif selected_section == "Segmentasi Gen Z Medan":
     )])
     fig.update_layout(
         title='Segmentasi Gen Z Medan (Estimasi)',
-        font=dict(color='#212121')
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='var(--text-color)', size=12)
     )
     fig.update_traces(textinfo='percent+label')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     st.markdown("""
     <div class="content-text">
-    **📝 Catatan:** persentase hanya estimasi deskriptif (proxy dari survei nasional & data provinsi); studi lapangan diperlukan untuk validasi lokal.
+        <p><strong>Catatan:</strong> persentase hanya estimasi deskriptif (proxy dari survei nasional & data provinsi); studi lapangan diperlukan untuk validasi lokal.</p>
     </div>
     """, unsafe_allow_html=True)
     st.markdown('<span class="source-badge">sumut.bps.go.id</span>', unsafe_allow_html=True)
@@ -900,75 +1005,86 @@ elif selected_section == "Implikasi & Rekomendasi":
         st.markdown("#### 🏛️ 7.1 Untuk Pemerintah Daerah (Pemkot Medan & Dinas terkait)")
         
         st.markdown("""
-        <div class="bulleted-list">
-        1. **📚 Kembangkan program literasi digital & keuangan** terintegrasi di SMA/mahasiswa (kolaborasi Dinas Pendidikan, OJK, Bank Indonesia).
-        
-        2. **❤️ Perkuat layanan kesehatan mental** berbasis sekolah/kampus (screening, counsellor, rujukan ke fasilitas kesehatan) mengacu pada temuan UGM/UNICEF.
-        
-        3. **🚀 Fasilitasi inkubator wirausaha remaja** untuk mendorong side-hustle produktif, sambil memberikan akses pasar lokal & pelatihan digital marketing.
-        
-        4. **🌐 Tingkatkan infrastruktur digital** di wilayah-wilayah dengan akses terbatas.
+        <div class="tab-content">
+            <div class="bulleted-list">
+                <ol>
+                    <li><strong>Kembangkan program literasi digital & keuangan</strong> terintegrasi di SMA/mahasiswa (kolaborasi Dinas Pendidikan, OJK, Bank Indonesia).</li>
+                    <li><strong>Perkuat layanan kesehatan mental</strong> berbasis sekolah/kampus (screening, counsellor, rujukan ke fasilitas kesehatan) mengacu pada temuan UGM/UNICEF.</li>
+                    <li><strong>Fasilitasi inkubator wirausaha remaja</strong> untuk mendorong side-hustle produktif, sambil memberikan akses pasar lokal & pelatihan digital marketing.</li>
+                    <li><strong>Tingkatkan infrastruktur digital</strong> di wilayah-wilayah dengan akses terbatas.</li>
+                </ol>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">OJK Portal</span>
+                <span class="source-badge">Universitas Gadjah Mada</span>
+                <span class="source-badge">Temasek Corporate Website English</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown('<span class="source-badge">OJK Portal</span> ', unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">Universitas Gadjah Mada</span> ', unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">Temasek Corporate Website English</span>', unsafe_allow_html=True)
     
     with tab2:
         st.markdown("#### 🏫 7.2 Untuk Institusi Pendidikan")
         
         st.markdown("""
-        <div class="bulleted-list">
-        1. **📚 Integrasikan pendidikan literasi finansial**, keselamatan digital, dan manajemen kesehatan mental ke kurikulum karakter/kewirausahaan.
-        
-        2. **👥 Bentuk pusat konseling** yang mudah diakses oleh siswa/mahasiswa dengan staf terlatih.
-        
-        3. **🤝 Kembangkan program magang dan kewirausahaan** yang link and match dengan kebutuhan industri lokal.
-        
-        4. **💻 Sediakan akses ke platform pembelajaran digital** yang relevan dengan minat Gen Z.
+        <div class="tab-content">
+            <div class="bulleted-list">
+                <ol>
+                    <li><strong>Integrasikan pendidikan literasi finansial</strong>, keselamatan digital, dan manajemen kesehatan mental ke kurikulum karakter/kewirausahaan.</li>
+                    <li><strong>Bentuk pusat konseling</strong> yang mudah diakses oleh siswa/mahasiswa dengan staf terlatih.</li>
+                    <li><strong>Kembangkan program magang dan kewirausahaan</strong> yang link and match dengan kebutuhan industri lokal.</li>
+                    <li><strong>Sediakan akses ke platform pembelajaran digital</strong> yang relevan dengan minat Gen Z.</li>
+                </ol>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">OJK Portal</span>
+                <span class="source-badge">studi akademik</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown('<span class="source-badge">OJK Portal</span> ', unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">studi akademik</span>', unsafe_allow_html=True)
     
     with tab3:
         st.markdown("#### 💼 7.3 Untuk Pelaku Bisnis & Industri")
         
         st.markdown("""
-        <div class="bulleted-list">
-        1. **📱 Gunakan kombinasi platform** (TikTok + Instagram + marketplace) untuk menjangkau Gen Z Medan—konten harus otentik, singkat, dan interaktif (live commerce).
-        
-        2. **💳 Berikan opsi pembayaran digital** yang mudah & edukasi pengguna (untuk mengurangi chargeback/penipuan).
-        
-        3. **🎯 Kembangkan produk/layanan** yang sesuai dengan preferensi Gen Z: pengalaman, personalisasi, dan nilai keberlanjutan.
-        
-        4. **🌟 Kolaborasi dengan influencer lokal** yang relevan dengan segmentasi Gen Z Medan.
+        <div class="tab-content">
+            <div class="bulleted-list">
+                <ol>
+                    <li><strong>Gunakan kombinasi platform</strong> (TikTok + Instagram + marketplace) untuk menjangkau Gen Z Medan—konten harus otentik, singkat, dan interaktif (live commerce).</li>
+                    <li><strong>Berikan opsi pembayaran digital</strong> yang mudah & edukasi pengguna (untuk mengurangi chargeback/penipuan).</li>
+                    <li><strong>Kembangkan produk/layanan</strong> yang sesuai dengan preferensi Gen Z: pengalaman, personalisasi, dan nilai keberlanjutan.</li>
+                    <li><strong>Kolaborasi dengan influencer lokal</strong> yang relevan dengan segmentasi Gen Z Medan.</li>
+                </ol>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">TikTok For Business</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown('<span class="source-badge">TikTok For Business</span>', unsafe_allow_html=True)
     
     with tab4:
         st.markdown("#### 🤝 7.4 Untuk LSM & Organisasi Pemuda")
         
         st.markdown("""
-        <div class="bulleted-list">
-        1. **🌱 Program advokasi inklusi** (pelatihan wirausaha, kesehatan mental peer support).
-        
-        2. **🗺️ Pemetaan komunitas online lokal** untuk kampanye sosial yang relevan.
-        
-        3. **🔗 Jembatan antara generasi** untuk transfer nilai tradisional dengan pendekatan modern.
-        
-        4. **📊 Monitoring dan evaluasi** program pemuda untuk memastikan efektivitas intervensi.
-        
-        5. **🎯 Fokus pada kelompok rentan** dalam program pemberdayaan.
+        <div class="tab-content">
+            <div class="bulleted-list">
+                <ol>
+                    <li><strong>Program advokasi inklusi</strong> (pelatihan wirausaha, kesehatan mental peer support).</li>
+                    <li><strong>Pemetaan komunitas online lokal</strong> untuk kampanye sosial yang relevan.</li>
+                    <li><strong>Jembatan antara generasi</strong> untuk transfer nilai tradisional dengan pendekatan modern.</li>
+                    <li><strong>Monitoring dan evaluasi</strong> program pemuda untuk memastikan efektivitas intervensi.</li>
+                    <li><strong>Fokus pada kelompok rentan</strong> dalam program pemberdayaan.</li>
+                </ol>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <span class="source-badge">UNICEF</span>
+                <span class="source-badge">Kemenpora</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown('<span class="source-badge">UNICEF</span> ', unsafe_allow_html=True)
-        st.markdown('<span class="source-badge">Kemenpora</span>', unsafe_allow_html=True)
 
 elif selected_section == "Kesimpulan":
     st.markdown('<h2 class="section-header">✅ 8. Kesimpulan</h2>', unsafe_allow_html=True)
@@ -978,53 +1094,52 @@ elif selected_section == "Kesimpulan":
     with col1:
         st.markdown("""
         <div class="highlight-box">
-        <h4>🎯 Potensi & Peluang</h4>
-        <div class="bulleted-list">
-        <ul>
-        <li><strong>💡 Digital natives</strong> dengan adopsi teknologi cepat</li>
-        <li><strong>🚀 Potensi ekonomi digital</strong> dan kreatif yang besar</li>
-        <li><strong>💪 Semangat kewirausahaan</strong> yang tinggi</li>
-        <li><strong>🔗 Konektivitas sosial</strong> yang kuat</li>
-        <li><strong>🎨 Kreativitas</strong> dalam konten digital</li>
-        </ul>
-        </div>
+            <h4>🎯 Potensi & Peluang</h4>
+            <div class="bulleted-list">
+                <ul>
+                    <li><strong>Digital natives</strong> dengan adopsi teknologi cepat</li>
+                    <li><strong>Potensi ekonomi digital</strong> dan kreatif yang besar</li>
+                    <li><strong>Semangat kewirausahaan</strong> yang tinggi</li>
+                    <li><strong>Konektivitas sosial</strong> yang kuat</li>
+                    <li><strong>Kreativitas</strong> dalam konten digital</li>
+                </ul>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
         <div class="highlight-box">
-        <h4>⚠️ Tantangan & Risiko</h4>
-        <div class="bulleted-list">
-        <ul>
-        <li><strong>💰 Literasi keuangan</strong> yang belum merata</li>
-        <li><strong>😔 Isu kesehatan mental</strong> yang meningkat</li>
-        <li><strong>⚖️ Ketidaksetaraan akses</strong> pada beberapa segmen</li>
-        <li><strong>📸 Tekanan pencitraan sosial</strong> di media digital</li>
-        <li><strong>🎯 Konsumsi impulsif</strong> yang tinggi</li>
-        </ul>
-        </div>
+            <h4>⚠️ Tantangan & Risiko</h4>
+            <div class="bulleted-list">
+                <ul>
+                    <li><strong>Literasi keuangan</strong> yang belum merata</li>
+                    <li><strong>Isu kesehatan mental</strong> yang meningkat</li>
+                    <li><strong>Ketidaksetaraan akses</strong> pada beberapa segmen</li>
+                    <li><strong>Tekanan pencitraan sosial</strong> di media digital</li>
+                    <li><strong>Konsumsi impulsif</strong> yang tinggi</li>
+                </ul>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("""
     <div class="highlight-box">
-    <div class="content-text">
-    ### 🏙️ Gen Z Medan: Digital Natives dengan Potensi Besar
-    
-    Gen Z Medan adalah **kelompok demografis penting** yang dipengaruhi kuat oleh ekosistem digital: akses internet tinggi, konsumsi konten video pendek, dan keterlibatan pada ekonomi digital. Mereka menunjukkan **aspirasi kombinasi** antara stabilitas ekonomi (pekerjaan bergaji) dan kewirausahaan digital.
-    
-    ### 🤝 Kolaborasi Multi-Pihak
-    
-    **Intervensi terpadu** (pemerintah, sekolah, sektor swasta, LSM) diperlukan untuk:
-    - Memaksimalkan potensi pemuda Medan
-    - Meminimalkan risiko sosial-ekonomi
-    - Membangun ekosistem yang mendukung perkembangan optimal Gen Z
-    
-    ### 📚 Basis Data Kuat
-    
-    Semua rekomendasi didasarkan pada **sumber resmi dan riset terverifikasi** yang disebutkan sepanjang laporan.
-    </div>
+        <div class="content-text">
+            <h4 style="color: var(--primary-color);">🏙️ Gen Z Medan: Digital Natives dengan Potensi Besar</h4>
+            <p>Gen Z Medan adalah <strong>kelompok demografis penting</strong> yang dipengaruhi kuat oleh ekosistem digital: akses internet tinggi, konsumsi konten video pendek, dan keterlibatan pada ekonomi digital. Mereka menunjukkan <strong>aspirasi kombinasi</strong> antara stabilitas ekonomi (pekerjaan bergaji) dan kewirausahaan digital.</p>
+            
+            <h4 style="color: var(--primary-color); margin-top: 1.5rem;">🤝 Kolaborasi Multi-Pihak</h4>
+            <p><strong>Intervensi terpadu</strong> (pemerintah, sekolah, sektor swasta, LSM) diperlukan untuk:</p>
+            <ul class="bulleted-list">
+                <li>Memaksimalkan potensi pemuda Medan</li>
+                <li>Meminimalkan risiko sosial-ekonomi</li>
+                <li>Membangun ekosistem yang mendukung perkembangan optimal Gen Z</li>
+            </ul>
+            
+            <h4 style="color: var(--primary-color); margin-top: 1.5rem;">📚 Basis Data Kuat</h4>
+            <p>Semua rekomendasi didasarkan pada <strong>sumber resmi dan riset terverifikasi</strong> yang disebutkan sepanjang laporan.</p>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1035,7 +1150,7 @@ elif selected_section == "Daftar Pustaka":
     
     st.markdown("""
     <div class="content-text">
-    **📝 Catatan:** berikut hanya sebagian dari sumber yang dipakai; untuk akses dokumen lengkap, setiap entri diikuti oleh rujukan digital yang dapat diverifikasi melalui portal resmi lembaga (cited in-text).
+        <p><strong>Catatan:</strong> berikut hanya sebagian dari sumber yang dipakai; untuk akses dokumen lengkap, setiap entri diikuti oleh rujukan digital yang dapat diverifikasi melalui portal resmi lembaga (cited in-text).</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1058,9 +1173,9 @@ elif selected_section == "Daftar Pustaka":
     
     for i, (author, title, source, icon) in enumerate(references, 1):
         st.markdown(f"""
-        <div style="margin-bottom: 15px; padding: 12px; border-left: 4px solid #1976D2; background-color: #F5F5F5; border-radius: 4px;">
-            <p style="margin: 0; font-weight: 600; color: #0D47A1;">{icon} {author} {title}</p>
-            <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #424242;"><strong>Sumber:</strong> {source}</p>
+        <div style="margin-bottom: 15px; padding: 12px; border-left: 4px solid var(--secondary-color); background-color: var(--surface-color); border-radius: 4px;">
+            <p style="margin: 0; font-weight: 600; color: var(--primary-color);">{icon} {author} {title}</p>
+            <p style="margin: 5px 0 0 0; font-size: 0.9em; color: var(--text-color);"><strong>Sumber:</strong> {source}</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -1072,11 +1187,11 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.markdown("""
     <div style="text-align: center; padding: 1rem;">
-        <p style="color: #424242; font-size: 0.9rem; font-weight: 600;">
+        <p style="color: var(--text-color); font-size: 0.9rem; font-weight: 600;">
         📊 MEDAN YOUTH INSIGHTS: Membedah Minat & Perilaku Gen Z (SMA & Mahasiswa) Medan<br>
-        © 2024 | Analisis Berbasis Data Sekunder Terverifikasi
+        © fxf28 | Analisis Berbasis Data Sekunder Terverifikasi
         </p>
-        <p style="color: #757575; font-size: 0.8rem;">
+        <p style="color: var(--text-color); opacity: 0.7; font-size: 0.8rem;">
         Dibuat dengan Streamlit | Update: Januari 2025
         </p>
     </div>
